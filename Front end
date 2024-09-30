@@ -1,0 +1,31 @@
+// TodoList.js
+import React, { useState, useEffect } from 'react';
+import AddTask from './AddTask';
+import TodoItem from './TodoItem';
+
+const TodoList = () => {
+    const [tasks, setTasks] = useState([]);
+
+    useEffect(() => {
+        fetchTasks();
+    }, []);
+
+    const fetchTasks = async () => {
+        const response = await fetch('/tasks');
+        const data = await response.json();
+        setTasks(data);
+    };
+
+    return (
+        <div>
+            <AddTask fetchTasks={fetchTasks} />
+            <ul>
+                {tasks.map(task => (
+                    <TodoItem key={task._id} task={task} fetchTasks={fetchTasks} />
+                ))}
+            </ul>
+        </div>
+    );
+};
+
+export default TodoList;
